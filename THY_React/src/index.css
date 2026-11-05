@@ -1,0 +1,8 @@
+/* Estilos globales y propios de TWY */
+@import "./styles.css";
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
