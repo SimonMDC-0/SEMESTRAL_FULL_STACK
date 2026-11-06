@@ -14,9 +14,9 @@ interface CarouselSlide {
 const slides: CarouselSlide[] = [
   {
     id: 1,
-    title: 'Adquiere tu soberania territorial',
+    title: 'Adquiere tu soberanía territorial',
     description:
-      'Aprovecha la oportunidad de ser dueno y soberano de los territorios mas codiciados del planeta tierra.',
+      'Aprovecha la oportunidad de ser dueño y soberano de los territorios más codiciados del planeta tierra.',
     buttonText: 'Ver productos',
     image: '/img/territorio_suiza.jpg',
     imageAlt: 'Suiza Alpina'
@@ -25,10 +25,10 @@ const slides: CarouselSlide[] = [
     id: 2,
     title: 'Territorios Exclusivos',
     description:
-      'Descubre naciones con alta plusvalia internacional y recursos estrategicos listos para transferir.',
-    buttonText: 'Explorar catalogo',
+      'Descubre naciones con alta plusvalía internacional y recursos estratégicos listos para transferir.',
+    buttonText: 'Explorar catálogo',
     image: '/img/territorio_monaco.jpg',
-    imageAlt: 'Principado de Monaco'
+    imageAlt: 'Principado de Mónaco'
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const slides: CarouselSlide[] = [
       'Revisa las mejores oportunidades del mes con facilidades de financiamiento global.',
     buttonText: 'Ver ofertas',
     image: '/img/territorio_singapur.jpg',
-    imageAlt: 'Republica de Singapur'
+    imageAlt: 'República de Singapur'
   }
 ];
 
@@ -48,7 +48,7 @@ export interface CarouselProps {
 
 export const Carousel: React.FC<CarouselProps> = ({
   onNavigateToProducts,
-  interval = 4000
+  interval = 2500
 }) => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -75,27 +75,13 @@ export const Carousel: React.FC<CarouselProps> = ({
   };
 
   return (
-    <section id="hero" aria-label="Banner principal">
+    <section id="hero" aria-label="Banner principal" className="py-2">
       <div
         id="carouselPrincipal"
-        className="carousel slide container my-4"
+        className="carousel slide container my-4 position-relative"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Indicadores del carrusel */}
-        <div className="carousel-indicators mb-2">
-          {slides.map((slide, idx) => (
-            <button
-              key={slide.id}
-              type="button"
-              className={idx === activeIndex ? 'active' : ''}
-              aria-current={idx === activeIndex ? 'true' : undefined}
-              aria-label={`Slide ${idx + 1}`}
-              onClick={() => setActiveIndex(idx)}
-            ></button>
-          ))}
-        </div>
-
         {/* Diapositivas */}
         <div className="carousel-inner rounded-3 border">
           {slides.map((slide, idx) => {
@@ -103,14 +89,14 @@ export const Carousel: React.FC<CarouselProps> = ({
             return (
               <div
                 key={slide.id}
-                className={`carousel-item p-4 p-md-5 ${isActive ? 'active' : ''}`}
+                className={`carousel-item px-4 px-md-5 py-4 py-md-5 pb-5 ${isActive ? 'active' : ''}`}
                 style={{
                   display: isActive ? 'block' : 'none',
-                  animation: isActive ? 'fadeIn 0.4s ease-in-out' : 'none'
+                  animation: isActive ? 'fadeIn 0.2s ease-in-out' : 'none'
                 }}
               >
                 <div className="row align-items-center">
-                  <div className="col-md-6 pe-md-4">
+                  <div className="col-md-6 pe-md-4 ps-md-3">
                     <h1 className="fw-bold mb-3">{slide.title}</h1>
                     <p className="text-secondary mb-4">{slide.description}</p>
                     <Button
@@ -121,9 +107,9 @@ export const Carousel: React.FC<CarouselProps> = ({
                       {slide.buttonText}
                     </Button>
                   </div>
-                  <div className="col-md-6 mt-4 mt-md-0">
+                  <div className="col-md-6 mt-4 mt-md-0 pe-md-3">
                     <div
-                      className="border rounded-3 overflow-hidden"
+                      className="border rounded-3 overflow-hidden shadow-sm"
                       style={{ minHeight: '260px', maxHeight: '320px' }}
                     >
                       <img
@@ -145,7 +131,8 @@ export const Carousel: React.FC<CarouselProps> = ({
           className="carousel-control-prev"
           type="button"
           onClick={handlePrev}
-          aria-label="Anterior"
+          aria-label="Diapositiva anterior"
+          title="Anterior"
         >
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Anterior</span>
@@ -154,11 +141,28 @@ export const Carousel: React.FC<CarouselProps> = ({
           className="carousel-control-next"
           type="button"
           onClick={handleNext}
-          aria-label="Siguiente"
+          aria-label="Diapositiva siguiente"
+          title="Siguiente"
         >
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
           <span className="visually-hidden">Siguiente</span>
         </button>
+
+        {/* Indicadores del carrusel */}
+        <div className="carousel-indicators mb-2">
+          {slides.map((slide, idx) => (
+            <button
+              key={slide.id}
+              type="button"
+              data-bs-target="#carouselPrincipal"
+              data-bs-slide-to={idx}
+              className={idx === activeIndex ? 'active' : ''}
+              aria-current={idx === activeIndex ? 'true' : undefined}
+              aria-label={`Ir a diapositiva ${idx + 1}`}
+              onClick={() => setActiveIndex(idx)}
+            ></button>
+          ))}
+        </div>
       </div>
     </section>
   );

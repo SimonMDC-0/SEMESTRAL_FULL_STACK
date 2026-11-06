@@ -40,6 +40,7 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
 }
 
 /* -- Header / Navbar -------------------------------------- */
@@ -199,10 +200,95 @@ header .btn-success:hover {
     background-color: var(--color-card) !important;
 }
 
-/* Flechas del carrusel */
+/* Botones de navegacion (Flechas Anterior y Siguiente) */
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.95;
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    padding: 0;
+}
+
+.carousel-control-prev {
+    left: 14px;
+}
+
+.carousel-control-next {
+    right: 14px;
+}
+
+@media (min-width: 992px) {
+    .carousel-control-prev {
+        left: -20px;
+    }
+    .carousel-control-next {
+        right: -20px;
+    }
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+    background-color: var(--color-bg);
+    border-color: var(--color-primary);
+    box-shadow: 0 6px 18px rgba(45, 106, 79, 0.25);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.carousel-control-prev:active,
+.carousel-control-next:active {
+    transform: translateY(-50%) scale(0.96);
+}
+
+.carousel-control-prev:focus-visible,
+.carousel-control-next:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+[data-bs-theme="dark"] .carousel-control-prev,
+[data-bs-theme="dark"] .carousel-control-next {
+    background-color: var(--color-card);
+    border-color: var(--color-border);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+[data-bs-theme="dark"] .carousel-control-prev:hover,
+[data-bs-theme="dark"] .carousel-control-next:hover {
+    background-color: var(--color-card);
+    border-color: var(--color-price);
+    box-shadow: 0 6px 18px rgba(116, 198, 157, 0.3);
+}
+
+/* Iconos de flechas */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
     filter: invert(1) brightness(0.2);
+    transition: transform 0.2s ease;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon {
+    transform: translateX(-1px);
+}
+
+.carousel-control-next:hover .carousel-control-next-icon {
+    transform: translateX(1px);
 }
 
 [data-bs-theme="dark"] .carousel-control-prev-icon,
@@ -211,17 +297,70 @@ header .btn-success:hover {
 }
 
 /* Indicadores del carrusel */
+.carousel-indicators {
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+    left: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.carousel-indicators button,
 .carousel-indicators [data-bs-target] {
+    box-sizing: border-box;
+    width: 26px;
+    height: 6px;
+    border-radius: 3px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-border);
+    opacity: 0.6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators button:hover,
+.carousel-indicators [data-bs-target]:hover {
+    opacity: 0.9;
     background-color: var(--color-primary);
-    opacity: 0.4;
 }
 
-[data-bs-theme="dark"] .carousel-indicators [data-bs-target] {
-    background-color: var(--color-price);
-}
-
-.carousel-indicators .active {
+.carousel-indicators button.active,
+.carousel-indicators [data-bs-target].active {
+    width: 44px;
+    background-color: var(--color-primary);
     opacity: 1;
+}
+
+[data-bs-theme="dark"] .carousel-indicators button,
+[data-bs-theme="dark"] .carousel-indicators [data-bs-target] {
+    background-color: var(--color-border);
+    opacity: 0.45;
+}
+
+[data-bs-theme="dark"] .carousel-indicators button.active,
+[data-bs-theme="dark"] .carousel-indicators [data-bs-target].active {
+    background-color: var(--color-price);
+    opacity: 1;
+}
+
+/* Animacion de entrada de slide */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* -- Seccion de Productos --------------------------------- */
