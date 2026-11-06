@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
+import PublicLayout from './components/PublicLayout';
+import AdminLayout from './components/AdminLayout';
 import Home from './pages/Home';
 import Productos from './pages/Productos';
 import DetalleProducto from './pages/DetalleProducto';
@@ -51,7 +52,7 @@ export function App() {
     <HashRouter>
       <Routes>
         {/* Rutas Públicas (con Header y Footer de cliente) */}
-        <Route element={<Layout />}>
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<Home territorios={territorios} />} />
           <Route
             path="/productos"
@@ -69,7 +70,7 @@ export function App() {
         </Route>
 
         {/* Rutas Administrativas (con Header y Footer de admin) */}
-        <Route element={<Layout isAdmin />}>
+        <Route element={<AdminLayout />}>
           <Route path="/panel-admin" element={<PanelAdmin />} />
           <Route
             path="/agregar-producto"
