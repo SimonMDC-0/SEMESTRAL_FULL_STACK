@@ -12,3 +12,5 @@ export * from './PublicFooter';
 export * from './AdminFooter';
 export * from './PublicLayout';
 export * from './AdminLayout';
+export * from './PurchaseModal';
+export * from './EditTerritoryModal';

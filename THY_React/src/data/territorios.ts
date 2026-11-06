@@ -198,28 +198,5 @@ export const territoriosData: Territorio[] = [
     ],
     destacado: false,
     oferta: true
-  },
-  {
-    id: 9,
-    nombre: "Colombia",
-    superficie: "2,166 km²",
-    superficieNum: 12324,
-    poblacion: "13,000 hab.",
-    poblacionNum: 13000,
-    precio: "$9,400,000",
-    precioNum: 9400000,
-    categoria: "Paradisiaco",
-    atributo: "Oferta Especial",
-    imagen: "/img/territorio_groenlandia.jpg",
-    descripcion:
-      "Colombia, conocida por su diversidad cultural y natural, ofrece oportunidades únicas en inversión y desarrollo sostenible.",
-    caracteristicas: [
-      "Paisaje: Variedad de ecosistemas que van desde playas hasta montañas y selvas.",
-      "Cultura: Rica herencia cultural con comunidades indígenas y mestizas.",
-      "Biodiversidad: Habitat para una gran variedad de especies endémicas.",
-      "Exclusividad: Una de las adquisiciones soberanas más ambiciosas de la era moderna."
-    ],
-    destacado: false,
-    oferta: true
   }
 ];

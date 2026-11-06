@@ -4,10 +4,10 @@ import StatCard from '../components/StatCard';
 import Button from '../components/Button';
 import {
   transaccionesIniciales,
-  metricasAdmin,
   type TransaccionAdmin
 } from '../data/adminData';
 import type { Territorio } from '../data/territorios';
+import { calcularMetricasAdmin } from '../utils/metricas';
 
 export interface PanelAdminProps {
   transacciones?: TransaccionAdmin[];
@@ -22,29 +22,12 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
   onNavigateAgregarProducto,
   onNavigateEditarTerritorios
 }) => {
-  // Calculo reactivo de metricas generales
-  const baseVendidos = metricasAdmin.territoriosVendidos;
-  const nuevasTxCount = Math.max(
-    0,
-    transacciones.length - transaccionesIniciales.length
-  );
-  const territoriosVendidos = baseVendidos + nuevasTxCount;
-
-  const territoriosActivos =
-    territorios.length > 0
-      ? territorios.length
-      : metricasAdmin.territoriosActivos;
-
-  // Calculo reactivo de ingresos acumulados del mes
-  const nuevosIngresos = transacciones
-    .slice(0, nuevasTxCount)
-    .reduce((acc, tx) => {
-      const num = Number(tx.monto.replace(/[^0-9]/g, ''));
-      return acc + (isNaN(num) ? 0 : num);
-    }, 0);
-  const baseMillones = 12.5;
-  const totalMillones = baseMillones + nuevosIngresos / 1000000;
-  const ingresosDelMes = `$${totalMillones.toFixed(1)}M`;
+  const {
+    territoriosVendidos,
+    territoriosActivos,
+    usuariosRegistrados,
+    ingresosDelMes
+  } = calcularMetricasAdmin(transacciones, territorios);
 
   return (
     <main className="container py-4">
@@ -67,7 +50,7 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
         </div>
         <div className="col-md-3">
           <StatCard
-            number={metricasAdmin.usuariosRegistrados}
+            number={usuariosRegistrados}
             label="Usuarios Registrados"
           />
         </div>
