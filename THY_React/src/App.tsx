@@ -20,7 +20,9 @@ export function App() {
     transacciones,
     handleAddTerritorio,
     handleUpdateTerritorio,
-    handleAddTransaccion
+    handleAddTransaccion,
+    handleDeleteTransaccion,
+    handleClearTransacciones
   } = useAppData();
 
   return (
@@ -57,6 +59,8 @@ export function App() {
               <PanelAdmin
                 transacciones={transacciones}
                 territorios={territorios}
+                onDeleteTransaccion={handleDeleteTransaccion}
+                onClearTransacciones={handleClearTransacciones}
               />
             }
           />

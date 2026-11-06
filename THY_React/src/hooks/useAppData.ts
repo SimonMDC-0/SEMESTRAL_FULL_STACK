@@ -61,12 +61,22 @@ export function useAppData() {
     setTransacciones((prev) => [nuevaTx, ...prev]);
   };
 
+  const handleDeleteTransaccion = (id: string) => {
+    setTransacciones((prev) => prev.filter((tx) => tx.id !== id));
+  };
+
+  const handleClearTransacciones = () => {
+    setTransacciones([]);
+  };
+
   return {
     territorios,
     transacciones,
     handleAddTerritorio,
     handleUpdateTerritorio,
-    handleAddTransaccion
+    handleAddTransaccion,
+    handleDeleteTransaccion,
+    handleClearTransacciones
   };
 }
 

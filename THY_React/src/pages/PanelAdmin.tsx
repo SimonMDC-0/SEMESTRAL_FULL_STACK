@@ -14,13 +14,17 @@ export interface PanelAdminProps {
   territorios?: Territorio[];
   onNavigateAgregarProducto?: () => void;
   onNavigateEditarTerritorios?: () => void;
+  onDeleteTransaccion?: (id: string) => void;
+  onClearTransacciones?: () => void;
 }
 
 export const PanelAdmin: React.FC<PanelAdminProps> = ({
   transacciones = transaccionesIniciales,
   territorios = [],
   onNavigateAgregarProducto,
-  onNavigateEditarTerritorios
+  onNavigateEditarTerritorios,
+  onDeleteTransaccion,
+  onClearTransacciones
 }) => {
   const {
     territoriosVendidos,
@@ -28,6 +32,26 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
     usuariosRegistrados,
     ingresosDelMes
   } = calcularMetricasAdmin(transacciones, territorios);
+
+  const handleDelete = (id: string, territorio: string) => {
+    if (
+      window.confirm(
+        `¿Confirmas la eliminación de la transacción ${id} (${territorio})?`
+      )
+    ) {
+      onDeleteTransaccion?.(id);
+    }
+  };
+
+  const handleClearAll = () => {
+    if (
+      window.confirm(
+        '¿Estás seguro de que deseas eliminar todas las transacciones del historial? Esta acción no se puede deshacer.'
+      )
+    ) {
+      onClearTransacciones?.();
+    }
+  };
 
   return (
     <main className="container py-4">
@@ -59,10 +83,21 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
         </div>
       </div>
 
-      {/* Encabezado tabla + boton nuevo territorio */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      {/* Encabezado tabla + acciones */}
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2 className="form-banner mb-0">Últimas Transacciones</h2>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 flex-wrap">
+          {transacciones.length > 0 && onClearTransacciones && (
+            <Button
+              variant="outline-danger"
+              size="sm"
+              onClick={handleClearAll}
+              title="Eliminar todas las transacciones registradas"
+            >
+              Vaciar Transacciones
+            </Button>
+          )}
+
           {onNavigateEditarTerritorios ? (
             <Button
               variant="outline-success"
@@ -125,38 +160,57 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
             </tr>
           </thead>
           <tbody>
-            {transacciones.map((tx) => (
-              <tr key={tx.id}>
-                <td className="px-3 fw-bold territory-id">{tx.id}</td>
-                <td className="px-3 fw-semibold">{tx.territorio}</td>
-                <td className="px-3">{tx.comprador}</td>
-                <td className="px-3">{tx.fecha}</td>
-                <td className="px-3 fw-bold price">{tx.monto}</td>
-                <td className="px-3">
-                  <span
-                    className={
-                      tx.estado === 'Completado'
-                        ? 'badge-custom-success'
-                        : 'badge-custom-warning'
-                    }
-                  >
-                    {tx.estado}
-                  </span>
-                </td>
-                <td className="px-3 text-center">
-                  <button
-                    className="btn btn-sm btn-outline-success"
-                    onClick={() =>
-                      alert(
-                        `Detalles de ${tx.id}:\nTerritorio: ${tx.territorio}\nComprador: ${tx.comprador}\nMonto: ${tx.monto}\nEstado: ${tx.estado}`
-                      )
-                    }
-                  >
-                    Detalles
-                  </button>
+            {transacciones.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="text-center py-5 text-muted">
+                  No hay transacciones registradas en este momento.
                 </td>
               </tr>
-            ))}
+            ) : (
+              transacciones.map((tx) => (
+                <tr key={tx.id}>
+                  <td className="px-3 fw-bold territory-id">{tx.id}</td>
+                  <td className="px-3 fw-semibold">{tx.territorio}</td>
+                  <td className="px-3">{tx.comprador}</td>
+                  <td className="px-3">{tx.fecha}</td>
+                  <td className="px-3 fw-bold price">{tx.monto}</td>
+                  <td className="px-3">
+                    <span
+                      className={
+                        tx.estado === 'Completado'
+                          ? 'badge-custom-success'
+                          : 'badge-custom-warning'
+                      }
+                    >
+                      {tx.estado}
+                    </span>
+                  </td>
+                  <td className="px-3 text-center">
+                    <div className="d-flex justify-content-center gap-2">
+                      <Button
+                        variant="outline-success"
+                        size="sm"
+                        onClick={() =>
+                          alert(
+                            `Detalles de ${tx.id}:\nTerritorio: ${tx.territorio}\nComprador: ${tx.comprador}\nMonto: ${tx.monto}\nEstado: ${tx.estado}`
+                          )
+                        }
+                      >
+                        Detalles
+                      </Button>
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => handleDelete(tx.id, tx.territorio)}
+                        title={`Eliminar transacción ${tx.id}`}
+                      >
+                        Eliminar
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

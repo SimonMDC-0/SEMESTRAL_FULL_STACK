@@ -6,6 +6,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     | 'outline-primary'
     | 'success'
     | 'outline-success'
+    | 'danger'
+    | 'outline-danger'
     | 'dark'
     | 'outline-dark'
     | 'secondary'
@@ -26,6 +28,10 @@ function getVariantClass(variant: ButtonProps['variant']): string {
       return 'btn btn-success';
     case 'outline-success':
       return 'btn btn-outline-success';
+    case 'danger':
+      return 'btn btn-danger';
+    case 'outline-danger':
+      return 'btn btn-outline-danger';
     case 'dark':
       return 'btn btn-dark';
     case 'outline-dark':
