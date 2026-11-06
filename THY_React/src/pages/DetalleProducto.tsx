@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Button from '../components/Button';
 import type { Territorio } from '../data/territorios';
+import type { TransaccionAdmin } from '../data/adminData';
 import { validarEmail, validarTelefono } from '../utils/validaciones';
 
 export interface DetalleProductoProps {
@@ -9,13 +10,15 @@ export interface DetalleProductoProps {
   territorio?: Territorio;
   onNavigateToProducts?: () => void;
   onNavigateToContact?: () => void;
+  onAddTransaccion?: (tx: TransaccionAdmin) => void;
 }
 
 export const DetalleProducto: React.FC<DetalleProductoProps> = ({
   territorios = [],
   territorio: explicitTerritorio,
   onNavigateToProducts,
-  onNavigateToContact
+  onNavigateToContact,
+  onAddTransaccion
 }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -93,6 +96,27 @@ export const DetalleProducto: React.FC<DetalleProductoProps> = ({
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
+    }
+
+    // Generar la nueva transacción
+    const hoy = new Date();
+    const fecha = `${String(hoy.getDate()).padStart(2, '0')}/${String(
+      hoy.getMonth() + 1
+    ).padStart(2, '0')}/${hoy.getFullYear()}`;
+    const txId = `TX-${Date.now().toString().slice(-4)}`;
+
+    const nuevaTx: TransaccionAdmin = {
+      id: txId,
+      territorio: territorio.nombre,
+      comprador: `${formData.nombre} (${formData.email})`,
+      fecha,
+      monto: territorio.precio,
+      estado: 'Pendiente'
+    };
+
+    // Disparar acción hacia el estado central si está provisto
+    if (onAddTransaccion) {
+      onAddTransaccion(nuevaTx);
     }
 
     setErrors({});
@@ -237,7 +261,7 @@ export const DetalleProducto: React.FC<DetalleProductoProps> = ({
           <div
             className="modal d-block"
             tabIndex={-1}
-            style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
             onClick={handleCloseModal}
           >
             <div
@@ -433,8 +457,8 @@ export const DetalleProducto: React.FC<DetalleProductoProps> = ({
                           <option value="Fondo Fiduciario / Escrow">
                             Fondo Fiduciario / Escrow
                           </option>
-                          <option value="Tarjeta de Crédito Corporativa">
-                            Tarjeta de Crédito Corporativa
+                          <option value="Tarjeta Corporativa">
+                            Tarjeta Corporativa
                           </option>
                         </select>
                         {errors.metodoPago && (

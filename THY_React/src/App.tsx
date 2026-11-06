@@ -14,6 +14,7 @@ import PanelAdmin from './pages/PanelAdmin';
 import AgregarProducto from './pages/AgregarProducto';
 import EditarTerritorios from './pages/EditarTerritorios';
 import { territoriosData, type Territorio } from './data/territorios';
+import { transaccionesIniciales, type TransaccionAdmin } from './data/adminData';
 
 export function App() {
   const [territorios, setTerritorios] = useState<Territorio[]>(() => {
@@ -29,6 +30,19 @@ export function App() {
     return territoriosData;
   });
 
+  const [transacciones, setTransacciones] = useState<TransaccionAdmin[]>(() => {
+    try {
+      const saved = localStorage.getItem('twy_transacciones');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {
+      // ignore
+    }
+    return transaccionesIniciales;
+  });
+
   // Guardar modificaciones de territorios en localStorage
   useEffect(() => {
     try {
@@ -38,6 +52,15 @@ export function App() {
     }
   }, [territorios]);
 
+  // Guardar transacciones en localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('twy_transacciones', JSON.stringify(transacciones));
+    } catch {
+      // ignore
+    }
+  }, [transacciones]);
+
   const handleAddTerritorio = (nuevo: Territorio) => {
     setTerritorios((prev) => [nuevo, ...prev]);
   };
@@ -46,6 +69,10 @@ export function App() {
     setTerritorios((prev) =>
       prev.map((item) => (item.id === actualizado.id ? actualizado : item))
     );
+  };
+
+  const handleAddTransaccion = (nuevaTx: TransaccionAdmin) => {
+    setTransacciones((prev) => [nuevaTx, ...prev]);
   };
 
   return (
@@ -60,7 +87,12 @@ export function App() {
           />
           <Route
             path="/detalle/:id"
-            element={<DetalleProducto territorios={territorios} />}
+            element={
+              <DetalleProducto
+                territorios={territorios}
+                onAddTransaccion={handleAddTransaccion}
+              />
+            }
           />
           <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/blog" element={<Blog />} />
@@ -71,7 +103,15 @@ export function App() {
 
         {/* Rutas Administrativas (con Header y Footer de admin) */}
         <Route element={<AdminLayout />}>
-          <Route path="/panel-admin" element={<PanelAdmin />} />
+          <Route
+            path="/panel-admin"
+            element={
+              <PanelAdmin
+                transacciones={transacciones}
+                territorios={territorios}
+              />
+            }
+          />
           <Route
             path="/agregar-producto"
             element={<AgregarProducto onAddTerritorio={handleAddTerritorio} />}

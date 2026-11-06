@@ -620,90 +620,102 @@ h2.form-banner,
     color: #fff;
 }
 
-/* -- Panel Admin - tabla (fondo blanco con letras negras) -- */
+/* -- Panel Admin - tabla con soporte de tema claro y oscuro -- */
+.admin-table-container {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
 .admin-table {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
-    --bs-table-bg: #ffffff;
-    --bs-table-color: #1a1a1a;
-    --bs-table-border-color: #dee2e6;
+    background-color: var(--color-card) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
+    --bs-table-bg: var(--color-card);
+    --bs-table-color: var(--color-text);
+    --bs-table-border-color: var(--color-border);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .admin-table th {
-    background-color: #f1f3f5 !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
+    background-color: var(--color-header) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
     font-weight: 700;
     font-size: 0.85rem;
 }
 
 .admin-table td {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
+    background-color: var(--color-card) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
     vertical-align: middle;
 }
 
 .admin-table td.fw-bold,
 .admin-table td .fw-bold {
-    color: #1a1a1a !important;
+    color: var(--color-text) !important;
 }
 
 .admin-table td.territory-id,
 .admin-table td:first-child {
-    color: #495057 !important;
+    color: var(--color-muted) !important;
 }
 
 .admin-table td.price,
 .admin-table td .price {
-    color: #1a4731 !important;
+    color: var(--color-price) !important;
     font-weight: 700;
 }
 
 .admin-table tbody tr:hover td {
-    background-color: #f0f7f4 !important;
+    background-color: rgba(45, 106, 79, 0.08) !important;
 }
 
-/* En modo oscuro: asegurar fondo blanco con letras negras */
+/* Modo oscuro para tabla admin */
+[data-bs-theme="dark"] .admin-table-container {
+    background-color: var(--color-card);
+    border-color: var(--color-border);
+}
+
 [data-bs-theme="dark"] .admin-table {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
-    --bs-table-bg: #ffffff;
-    --bs-table-color: #1a1a1a;
-    --bs-table-border-color: #dee2e6;
+    background-color: var(--color-card) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
+    --bs-table-bg: var(--color-card);
+    --bs-table-color: var(--color-text);
+    --bs-table-border-color: var(--color-border);
 }
 
 [data-bs-theme="dark"] .admin-table th {
-    background-color: #f1f3f5 !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
+    background-color: var(--color-header) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
 }
 
 [data-bs-theme="dark"] .admin-table td {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
+    background-color: var(--color-card) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
 }
 
 [data-bs-theme="dark"] .admin-table td.fw-bold,
 [data-bs-theme="dark"] .admin-table td .fw-bold {
-    color: #1a1a1a !important;
+    color: var(--color-text) !important;
 }
 
 [data-bs-theme="dark"] .admin-table td.territory-id,
 [data-bs-theme="dark"] .admin-table td:first-child {
-    color: #495057 !important;
+    color: var(--color-muted) !important;
 }
 
 [data-bs-theme="dark"] .admin-table td.price,
 [data-bs-theme="dark"] .admin-table td .price {
-    color: #1a4731 !important;
+    color: var(--color-price) !important;
 }
 
 [data-bs-theme="dark"] .admin-table tbody tr:hover td {
-    background-color: #f0f7f4 !important;
+    background-color: rgba(116, 198, 157, 0.12) !important;
 }
 
 /* Tarjetas de metricas del admin */

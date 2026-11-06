@@ -2,18 +2,49 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard';
 import Button from '../components/Button';
-import { transaccionesIniciales, metricasAdmin, type TransaccionAdmin } from '../data/adminData';
+import {
+  transaccionesIniciales,
+  metricasAdmin,
+  type TransaccionAdmin
+} from '../data/adminData';
+import type { Territorio } from '../data/territorios';
 
 export interface PanelAdminProps {
+  transacciones?: TransaccionAdmin[];
+  territorios?: Territorio[];
   onNavigateAgregarProducto?: () => void;
   onNavigateEditarTerritorios?: () => void;
 }
 
 export const PanelAdmin: React.FC<PanelAdminProps> = ({
+  transacciones = transaccionesIniciales,
+  territorios = [],
   onNavigateAgregarProducto,
   onNavigateEditarTerritorios
 }) => {
-  const [transacciones] = React.useState<TransaccionAdmin[]>(transaccionesIniciales);
+  // Calculo reactivo de metricas generales
+  const baseVendidos = metricasAdmin.territoriosVendidos;
+  const nuevasTxCount = Math.max(
+    0,
+    transacciones.length - transaccionesIniciales.length
+  );
+  const territoriosVendidos = baseVendidos + nuevasTxCount;
+
+  const territoriosActivos =
+    territorios.length > 0
+      ? territorios.length
+      : metricasAdmin.territoriosActivos;
+
+  // Calculo reactivo de ingresos acumulados del mes
+  const nuevosIngresos = transacciones
+    .slice(0, nuevasTxCount)
+    .reduce((acc, tx) => {
+      const num = Number(tx.monto.replace(/[^0-9]/g, ''));
+      return acc + (isNaN(num) ? 0 : num);
+    }, 0);
+  const baseMillones = 12.5;
+  const totalMillones = baseMillones + nuevosIngresos / 1000000;
+  const ingresosDelMes = `$${totalMillones.toFixed(1)}M`;
 
   return (
     <main className="container py-4">
@@ -23,22 +54,31 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
       {/* Tarjetas de metricas */}
       <div className="row g-4 mb-5">
         <div className="col-md-3">
-          <StatCard number={metricasAdmin.territoriosVendidos} label="Territorios Vendidos" />
+          <StatCard
+            number={territoriosVendidos}
+            label="Territorios Vendidos"
+          />
         </div>
         <div className="col-md-3">
-          <StatCard number={metricasAdmin.territoriosActivos} label="Territorios Activos" />
+          <StatCard
+            number={territoriosActivos}
+            label="Territorios Activos"
+          />
         </div>
         <div className="col-md-3">
-          <StatCard number={metricasAdmin.usuariosRegistrados} label="Usuarios Registrados" />
+          <StatCard
+            number={metricasAdmin.usuariosRegistrados}
+            label="Usuarios Registrados"
+          />
         </div>
         <div className="col-md-3">
-          <StatCard number={metricasAdmin.ingresosDelMes} label="Ingresos del Mes" />
+          <StatCard number={ingresosDelMes} label="Ingresos del Mes" />
         </div>
       </div>
 
       {/* Encabezado tabla + boton nuevo territorio */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="form-banner mb-0">Ultimas Transacciones</h2>
+        <h2 className="form-banner mb-0">Últimas Transacciones</h2>
         <div className="d-flex gap-2">
           {onNavigateEditarTerritorios ? (
             <Button
@@ -49,7 +89,10 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
               Gestionar Territorios
             </Button>
           ) : (
-            <Link to="/editar-territorios" className="btn btn-outline-success btn-sm">
+            <Link
+              to="/editar-territorios"
+              className="btn btn-outline-success btn-sm"
+            >
               Gestionar Territorios
             </Link>
           )}
@@ -71,7 +114,7 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
       </div>
 
       {/* Tabla de administracion */}
-      <div className="table-responsive rounded-3" style={{ border: '1px solid var(--color-border)', backgroundColor: '#ffffff' }}>
+      <div className="table-responsive rounded-3 admin-table-container">
         <table className="table mb-0 admin-table">
           <thead>
             <tr>
@@ -101,9 +144,7 @@ export const PanelAdmin: React.FC<PanelAdminProps> = ({
           <tbody>
             {transacciones.map((tx) => (
               <tr key={tx.id}>
-                <td className="px-3 fw-bold territory-id">
-                  {tx.id}
-                </td>
+                <td className="px-3 fw-bold territory-id">{tx.id}</td>
                 <td className="px-3 fw-semibold">{tx.territorio}</td>
                 <td className="px-3">{tx.comprador}</td>
                 <td className="px-3">{tx.fecha}</td>

@@ -71,7 +71,7 @@ export const EditarTerritorios: React.FC<EditarTerritoriosProps> = ({
       </div>
 
       {/* Tabla de territorios */}
-      <div className="table-responsive rounded-3" style={{ border: '1px solid var(--color-border)', backgroundColor: '#ffffff' }}>
+      <div className="table-responsive rounded-3 admin-table-container">
         <table className="table mb-0 admin-table">
           <thead>
             <tr>
